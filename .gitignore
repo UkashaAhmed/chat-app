@@ -1,0 +1,42 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+gen/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build output
+/build/
+target/
+
+# Gradle
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+gradle-app.setting
+
+# Maven
+.mvn/
+log/
+dependency-reduced-pom.xml
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Virtual environments
+.env
+.venv
+
+# Others
+*.class
+*.jar
+*.war
+*.ear
+
+# VS Code (if used alongside IntelliJ)
+.vscode/
