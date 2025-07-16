@@ -1,19 +1,21 @@
 package com.example.friendshipservice.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 public class FriendRequest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(length = 36, nullable = false, updatable = false)
+    private String id;
 
-    private UUID senderId;
-    private UUID recipientId;
+    private String senderId;
+    private String receiverId;
 
     @Enumerated(EnumType.STRING)
     private FriendRequestStatus status;
@@ -23,25 +25,25 @@ public class FriendRequest {
     // Constructors
     public FriendRequest() {}
 
-    public FriendRequest(UUID id, UUID senderId, UUID recipientId, FriendRequestStatus status, Instant createdAt) {
+    public FriendRequest(String id, String senderId, String recipientId, FriendRequestStatus status, Instant createdAt) {
         this.id = id;
         this.senderId = senderId;
-        this.recipientId = recipientId;
+        this.receiverId = recipientId;
         this.status = status;
         this.createdAt = createdAt;
     }
 
     // Getters
-    public UUID getId() { return id; }
-    public UUID getSenderId() { return senderId; }
-    public UUID getRecipientId() { return recipientId; }
+    public String getId() { return id; }
+    public String getSenderId() { return senderId; }
+    public String getReceiverId() { return receiverId; }
     public FriendRequestStatus getStatus() { return status; }
     public Instant getCreatedAt() { return createdAt; }
 
     // Setters
-    public void setId(UUID id) { this.id = id; }
-    public void setSenderId(UUID senderId) { this.senderId = senderId; }
-    public void setRecipientId(UUID recipientId) { this.recipientId = recipientId; }
+    public void setId(String id) { this.id = id; }
+    public void setSenderId(String senderId) { this.senderId = senderId; }
+    public void setReceiverId(String receiverId) { this.receiverId = receiverId; }
     public void setStatus(FriendRequestStatus status) { this.status = status; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 }

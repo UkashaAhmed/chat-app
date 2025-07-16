@@ -11,7 +11,7 @@ public class FriendRequestMapper {
         FriendRequestDto dto = new FriendRequestDto();
         dto.setId(entity.getId());
         dto.setSenderId(entity.getSenderId());
-        dto.setRecipientId(entity.getRecipientId());
+        dto.setRecipientId(entity.getReceiverId());
         dto.setStatus(entity.getStatus());
         dto.setCreatedAt(entity.getCreatedAt());
         return dto;
@@ -21,7 +21,7 @@ public class FriendRequestMapper {
         FriendRequest entity = new FriendRequest();
         entity.setId(dto.getId());
         entity.setSenderId(dto.getSenderId());
-        entity.setRecipientId(dto.getRecipientId());
+        entity.setReceiverId(dto.getRecipientId());
         entity.setStatus(dto.getStatus());
         entity.setCreatedAt(dto.getCreatedAt());
         return entity;

@@ -4,33 +4,35 @@ import com.example.friendshipservice.client.UserClient;
 import com.example.friendshipservice.dto.FriendRequestDto;
 import com.example.friendshipservice.entity.FriendRequest;
 import com.example.friendshipservice.entity.FriendRequestStatus;
+import com.example.friendshipservice.entity.Friendship;
 import com.example.friendshipservice.mapper.FriendRequestMapper;
 import com.example.friendshipservice.repository.FriendRequestRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 @Service
-public class FriendshipServiceImpl implements FriendshipService {
+public class    FriendshipServiceImpl implements FriendshipService {
 
     private final FriendRequestRepository friendRequestRepository;
+    private final com.example.friendshipservice.repository.FriendshipRepository friendshipRepository;
     private final FriendRequestMapper mapper;
     private final UserClient userClient;
 
     public FriendshipServiceImpl(
             FriendRequestRepository friendRequestRepository,
             FriendRequestMapper mapper,
-            UserClient userClient
+            UserClient userClient, com.example.friendshipservice.repository.FriendshipRepository friendshipRepository
     ) {
         this.friendRequestRepository = friendRequestRepository;
         this.mapper = mapper;
         this.userClient = userClient;
+        this. friendshipRepository = friendshipRepository;
     }
 
     @Override
-    public FriendRequestDto sendFriendRequest(UUID senderId, UUID recipientId) {
+    public FriendRequestDto sendFriendRequest(String senderId, String recipientId) {
         // Ensure both users exist
         try {
             userClient.getUserById(senderId);
@@ -41,25 +43,35 @@ public class FriendshipServiceImpl implements FriendshipService {
 
         FriendRequest request = new FriendRequest();
         request.setSenderId(senderId);
-        request.setRecipientId(recipientId);
+        request.setReceiverId(recipientId);
         request.setStatus(FriendRequestStatus.PENDING);
         request.setCreatedAt(Instant.now());
 
         FriendRequest saved = friendRequestRepository.save(request);
         return mapper.toDto(saved);
     }
-
     @Override
-    public List<FriendRequestDto> getPendingRequests(UUID userId) {
+    public List<String> getFriendIds(String userId) {
+
+        List<Friendship> friendships = friendshipRepository.findAllByUser1IdOrUser2Id(userId, userId);
+
+
+        return friendships.stream()
+                .map(f -> f.getUser1Id().equals(userId) ? f.getUser2Id() : f.getUser1Id())
+                .distinct()
+                .toList();
+    }
+    @Override
+    public List<FriendRequestDto> getPendingRequests(String userId) {
         List<FriendRequest> requests = friendRequestRepository
-                .findByRecipientIdAndStatus(userId, FriendRequestStatus.PENDING);
+                .findByReceiverIdAndStatus(userId, FriendRequestStatus.PENDING);
         return requests.stream()
                 .map(mapper::toDto)
                 .toList();
     }
 
     @Override
-    public FriendRequestDto acceptRequest(UUID requestId) {
+    public FriendRequestDto acceptRequest(String requestId) {
         FriendRequest request = friendRequestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Friend request not found"));
 
@@ -69,7 +81,7 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
-    public void deleteRequest(UUID requestId) {
+    public void deleteRequest(String requestId) {
         if (!friendRequestRepository.existsById(requestId)) {
             throw new RuntimeException("Friend request not found");
         }
