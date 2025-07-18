@@ -1,17 +1,13 @@
 const API_BASE = "http://localhost:8083/api/chats";
 
 export const getConversations = async (userId) => {
-  try {
-    const response = await fetch(`${API_BASE}/conversations/${userId}`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch conversations");
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching chats:", error);
-    throw error;
+  const response = await fetch(`http://localhost:8083/api/chats/conversations/${userId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch conversations");
   }
+  return await response.json();
 };
+
 
 export const createConversation = async (participantIds) => {
   try {

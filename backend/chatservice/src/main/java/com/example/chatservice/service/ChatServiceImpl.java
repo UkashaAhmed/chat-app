@@ -49,7 +49,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public MessageDto sendMessage(String conversationId, SendMessageRequest request) {
+    public MessageDto sendMessage(String conversationId, MessageDto request) {
         Conversation conversation = conversationRepository.findById(conversationId)
                 .orElseThrow(() -> new RuntimeException("Conversation not found"));
 

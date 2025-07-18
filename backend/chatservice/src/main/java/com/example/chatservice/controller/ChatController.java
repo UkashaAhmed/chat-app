@@ -1,4 +1,4 @@
-package com.example.chatservice.controller;
+package com.example.chatservice.controller;//package com.example.chatservice.controller;
 
 import com.example.chatservice.dto.ConversationDto;
 import com.example.chatservice.dto.CreateConversationRequest;
@@ -29,15 +29,16 @@ public class ChatController {
     }
 
     @GetMapping("/conversations/{userId}")
-    public ResponseEntity<List<ConversationDto>> getConversationsForUser(
-            @PathVariable String userId) {
-        return ResponseEntity.ok(chatService.getConversationsForUser(userId));
+    public ResponseEntity<List<ConversationDto>> getConversationsForUser(@PathVariable String userId) {
+        List<ConversationDto> conversations = chatService.getConversationsForUser(userId);
+        return ResponseEntity.ok(conversations); // ← returns 200 OK with empty list
     }
+
 
     @PostMapping("/messages/{conversationId}")
     public ResponseEntity<MessageDto> sendMessage(
             @PathVariable String conversationId,
-            @RequestBody SendMessageRequest request) {
+            @RequestBody MessageDto request) {
         return ResponseEntity.ok(chatService.sendMessage(conversationId, request));
     }
 

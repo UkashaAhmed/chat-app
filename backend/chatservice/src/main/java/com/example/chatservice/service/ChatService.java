@@ -13,6 +13,6 @@ import java.util.UUID;
 public interface ChatService {
     ConversationDto createConversation(CreateConversationRequest request);
     List<ConversationDto> getConversationsForUser(String userId);
-    MessageDto sendMessage(String conversationId, SendMessageRequest request);
+    MessageDto sendMessage(String conversationId, MessageDto request);
     List<MessageDto> getMessagesInConversation(String conversationId);
 }
